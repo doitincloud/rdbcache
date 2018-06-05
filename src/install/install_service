@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# install_service
+#
+# By Sam Wen @ 02/10/2018
+#
+##########################
+
+if [ "$(id -u)" -ne 0 ] ; then
+  echo "This script must run under root."
+  exit 1
+fi
+
+if [ -L /etc/init.d/doitincloud.rdbcache ]; then
+  service doitincloud.rdbcache stop
+  rm -f /etc/init.d/doitincloud.rdbcache
+fi
+
+ln -s /opt/doitincloud.rdbcache/rdbcache_service /etc/init.d/doitincloud.rdbcache
+
+if [ -L /etc/doitincloud.rdbcache.conf ]; then
+  rm -f /etc/doitincloud.rdbcache.conf
+fi
+
+if [ -f /var/log/doitincloud.rdbcache.log ]; then
+  rm -f /var/log/doitincloud.rdbcache.log
+fi
+
+touch /var/log/doitincloud.rdbcache.log
+chmod 666 /var/log/doitincloud.rdbcache.log
+
+cat <<EOT > /etc/logrotate.d/doitincloud.rdbcache
+"/var/log/doitincloud.rdbcache.log" {
+  weekly
+  size 512k
+  rotate 12
+  create 666 root root
+  missingok
+  compress
+  delaycompress
+  copytruncate
+  notifempty
+}
+EOT
+
+ln -s /opt/doitincloud.rdbcache/application.properties /etc/doitincloud.rdbcache.conf
+
+chkconfig --add doitincloud.rdbcache
+
+service doitincloud.rdbcache start

@@ -1,0 +1,34 @@
+{
+  "table_list": {
+    "tables": ["user_table"]
+  },
+  "table_auto_inc_column": {
+    "user_table": "id"
+  },
+  "table_indexes::user_table": {
+    "PRIMARY": ["id"],
+    "email": ["email"]
+  },
+  "table_columns::user_table" : {
+    "id" : {
+      "type" : "int(11)",
+      "nullable" : false,
+      "default" : "auto_increment"
+    },
+    "email" : {
+      "type" : "varchar(255)",
+      "nullable" : true,
+      "default" : null
+    },
+    "name" : {
+      "type" : "varchar(32)",
+      "nullable" : true,
+      "default" : null
+    },
+    "dob" : {
+      "type" : "date",
+      "nullable" : true,
+      "default" : null
+    }
+  }
+}

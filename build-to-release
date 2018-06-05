@@ -1,0 +1,47 @@
+#!/bin/bash
+
+git add .
+
+git commit -m "update before release"
+
+git pull
+
+if [ $? -ne 0 ]; then
+  echo "git pull failed"
+  exit 1
+fi
+
+mvn -P prod clean package
+
+if [ $? -ne 0 ]; then
+  echo "maven failed"
+  exit 1
+fi
+  
+if [ ! -f target/rdbcache.jar ]; then
+  echo "target/rdbcache.jar not found!"
+  exit 1
+fi
+
+mkdir target/rdbcache
+
+cp target/rdbcache.jar target/rdbcache
+cp license.md target/rdbcache
+cp README.md target/rdbcache
+cp -r src/install/* target/rdbcache
+
+cd target
+
+#tar --exclude=.DS_Store --exclude=.* -zcf rdbcache.tar.gz rdbcache
+#cp -f rdbcache.tar.gz download/
+
+zip rdbcache.zip rdbcache/*
+cp -f rdbcache.zip ../download/
+
+cd ..
+
+git add .
+
+git commit -m "update build"
+
+git push

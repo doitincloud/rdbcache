@@ -1,0 +1,164 @@
+#!/bin/bash
+#
+# install doitincloud.rdbcache
+#
+# By Sam Wen @ 02/10/2018
+#
+##########################
+
+DOWNLOAD_URL='https://raw.githubusercontent.com/doitincloud.rdbcache/doitincloud.rdbcache/master/download/doitincloud.rdbcache.zip'
+
+if [ "$(id -u)" -ne 0 ] ; then
+  echo "This script must run under root."
+  exit 1
+fi
+
+JAVA_BIN=$(which java)
+
+if [ -z "$JAVA_BIN" ]; then
+  if [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
+      JAVA_BIN="$JAVA_HOME/bin/java"
+  elif type -p java > /dev/null 2>&1; then
+      JAVA_BIN=$(type -p java)
+  elif [[ -x "/usr/bin/java" ]];  then
+      JAVA_BIN="/usr/bin/java"
+  else
+      echo "Unable to find Java"
+      exit 1
+  fi
+fi
+
+JAVA_VERSION=$(echo "$($JAVA_BIN -version 2>&1)" | grep "java version" | awk '{ print substr($3, 2, length($3)-2); }')
+
+if [ -z "$JAVA_VERSION" ]; then
+  echo "Unable to get Java version"
+  exit 1
+fi
+
+VERSION_ARRAY=($(echo "$JAVA_VERSION" | tr \. ' '))
+
+if [ "${VERSION_ARRAY[0]}" -lt 1 ]; then
+  echo "Iava version $JAVA_VERSION is not supported. Please upgrade java to 1.8 or higher version."
+  exit 1
+fi
+
+if [ "${VERSION_ARRAY[0]}" -eq 1 ] && [ "${VERSION_ARRAY[1]}" -lt 8 ] ; then
+  echo "Java version $JAVA_VERSION is not supported. Please upgrade java to 1.8 or higher version."
+  exit 1
+fi
+
+echo "Download..."
+
+WGET_BIN=$(which wget)
+if [ -z "$WGET_BIN" ]; then
+  echo "Unable to find wget. Please install wget."
+  exit 1
+fi
+if [ -f ./doitincloud.rdbcache.zip ]; then
+  rm -f ./doitincloud.rdbcache.zip
+fi
+$WGET_BIN -q $DOWNLOAD_URL
+if [ $? -ne 0 ]; then
+  echo "Run wget failed"
+  exit 1
+fi
+if [ ! -f ./doitincloud.rdbcache.zip ]; then
+  echo "Failed to locate doitincloud.rdbcache.zip"
+  exit 1
+fi
+if [ -d ./doitincloud.rdbcache ]; then
+  rm -rf doitincloud.rdbcache
+fi
+
+UNZIP_BIN=$(which unzip)
+if [ -z "$UNZIP_BIN" ]; then
+  echo "Unable to find unzip. Please install unzip."
+  exit 1
+fi
+
+$UNZIP_BIN ./doitincloud.rdbcache.zip
+
+DOWNLOAD_DIR=$(pwd)/doitincloud.rdbcache
+rm -f ./doitincloud.rdbcache.zip
+
+if [ ! -f $DOWNLOAD_DIR/doitincloud.rdbcache.jar ]; then
+  echo "File doitincloud.rdbcache.jar not found."
+  exit 1
+fi
+
+if [ -d /opt/doitincloud.rdbcache ]; then
+  rm -rf /opt/doitincloud.rdbcache
+fi
+
+mkdir -p /opt/doitincloud.rdbcache
+
+cp $DOWNLOAD_DIR/* /opt/doitincloud.rdbcache
+
+rm -rf ./doitincloud.rdbcache
+
+cat <<EOT > /opt/doitincloud.rdbcache/doitincloud.rdbcache
+#!/bin/bash
+#
+# By Sam Wen @ 02/10/2018
+#
+##########################
+
+# load env variables
+if [ -f ~/.bash_profile ]; then
+  source ~/.bash_profile
+fi
+
+# check env variables, you may comment out
+# if you are not use env variables for configurations
+
+if [ -z "\$RDBCACHE_PORT" ]; then
+  echo "RDBCACHE_PORT is not set"
+  exit 1
+fi
+
+if [ -z "\$REDIS_SERVER" ]; then
+  echo "REDIS_SERVER is not set"
+  exit 1
+fi
+
+if [ -z "\$DATABASE_SERVER" ]; then
+  echo "DATABASE_SERVER is not set"
+  exit 1
+fi
+
+if [ -z "\$DATABASE_NAME" ]; then
+  echo "DATABASE_NAME is not set"
+  exit 1
+fi
+
+
+if [ -z "\$DB_USER_NAME" ]; then
+  echo "DB_USER_NAME is not set"
+  exit 1
+fi
+
+if [ -z "\$DB_USER_PASS" ]; then
+  echo "DB_USER_PASS is not set"
+  exit 1
+fi
+
+cd /opt/doitincloud.rdbcache
+$JAVA_BIN -jar ./doitincloud.rdbcache.jar "\$@"
+EOT
+
+chmod +x /opt/doitincloud.rdbcache/doitincloud.rdbcache
+
+if [ -L /usr/bin/doitincloud.rdbcache ]; then
+  rm -f /usr/bin/doitincloud.rdbcache
+fi
+
+BIN_FOLDER=$(dirname /usr/local/bin/wget)
+
+ln -s /opt/doitincloud.rdbcache/doitincloud.rdbcache $BIN_FOLDER/doitincloud.rdbcache
+
+echo ""
+echo "doitincloud.rdbcache is installed in /opt/doitincloud.rdbcache folder"
+echo "symlink $BIN_FOLDER/doitincloud.rdbcache is created"
+if [ "$(uname -s)" == "Linux" ]; then
+  echo "You can run /opt/doitincloud.rdbcache/install_service to install doitincloud.rdbcache as service"
+fi
