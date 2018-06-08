@@ -247,14 +247,46 @@ public class ExpireOps {
 
             if (noOps) {
 
-                List<String> primaryIndexes = AppCtx.getDbaseOps().getPrimaryIndexes(context, type);
-                if (primaryIndexes == null || primaryIndexes.size() > 1) {
-                    String msg = "unsupported primary index cases for NOOPS for table: " + type;
-                    LOGGER.trace(msg);
-                    context.closeMonitor();
-                    return;
+                String table = type;
+                String[] keyValues = new String[]{key};
+                if (hashKey.indexOf("/") > 0) {
+                    String[] tps = hashKey.split("/");
+                    table = tps[0];
+                    keyValues = tps[tps.length-1].split(":");
                 }
-                keyInfo = new KeyInfo(type, primaryIndexes.get(0), key);
+
+                List<String> primaryIndexes = AppCtx.getDbaseOps().getPrimaryIndexes(context, table);
+                if (primaryIndexes == null) {
+
+                    String msg = "best effort mode - primary index is null for NOOPS: " + table;
+                    LOGGER.trace(msg);
+                    context.logTraceMessage(msg);
+                    keyInfo = new KeyInfo();
+
+                } else if (primaryIndexes.size() == 1) {
+
+                    String indexKey = primaryIndexes.get(0);
+                    keyInfo = new KeyInfo(table, indexKey, keyValues[0]);
+
+                } else {
+
+                    String[] indexKeys = new String[primaryIndexes.size()];
+                    for (int i = 0; i < primaryIndexes.size(); i++) {
+                        indexKeys[i] = primaryIndexes.get(i);
+                    }
+                    if (indexKeys.length <= keyValues.length) {
+
+                        keyInfo = new KeyInfo(table, indexKeys, keyValues);
+
+                    } else {
+
+                        String msg = "best effort mode - values size not correct for NOOPS: " + table;
+                        LOGGER.warn(msg);
+                        context.logTraceMessage(msg);
+                        keyInfo = new KeyInfo();
+                    }
+                }
+
                 if (expireString != null) {
                     keyInfo.setExpire(expireString);
                 }
@@ -265,13 +297,13 @@ public class ExpireOps {
                 keyInfo = anyKey.getKeyInfo();
                 queryKey = keyInfo.getQueryKey();
 
-            } else {
+            }
 
-                String msg = "keyInfo not found";
-                LOGGER.error(msg);
-                context.logTraceMessage(msg);
+            if (keyInfo == null) {
+                String msg = "failed to get key info";
+                LOGGER.trace(msg);
+                context.closeMonitor();
                 return;
-
             }
 
             LOGGER.trace(keyInfo.toString());
