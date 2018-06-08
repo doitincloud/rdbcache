@@ -6,6 +6,7 @@
 
 package doitincloud.rdbcache.services;
 
+import doitincloud.commons.Refreshable;
 import doitincloud.rdbcache.exceptions.ServerErrorException;
 import doitincloud.rdbcache.configs.PropCfg;
 import doitincloud.rdbcache.supports.Context;
@@ -139,7 +140,6 @@ public class DbaseOps {
         return dbMap;
     }
 
-
     synchronized public void logTraceMessage(String traceId, String message, StackTraceElement[] trace) {
 
         Map<String, Object> log = new LinkedHashMap<String, Object>();
@@ -250,23 +250,26 @@ public class DbaseOps {
             return tablesMap;
         }
 
-        tablesMap = (Map<String, Object>) AppCtx.getCacheOps().put("tables_map", tableInfoCacheTTL * 1000L, () -> {
-            Map<String, Object> alltablesMap = fetchTableMap(context);
-            if (alltablesMap == null) {
-                LOGGER.error("failed to get table map");
-                return null;
-            }
-            Map<String, Object> indexes = fetchTableUniqueIndexes(context);
-            Map<String, Object> map = new LinkedHashMap<>();
-            for (Map.Entry<String, Object> entry: alltablesMap.entrySet()) {
-                String table = entry.getKey();
-                if (indexes.containsKey(table)) {
-                    map.put(table, entry.getValue());
-                } else {
-                    LOGGER.warn("skip " + table + " table, due to no primary or unique index info");
+        tablesMap = (Map<String, Object>) AppCtx.getCacheOps().put("tables_map", tableInfoCacheTTL, new Refreshable() {
+            @Override
+            public Map<String, Object> call() throws Exception {
+                Map<String, Object> alltablesMap = fetchTableMap(context);
+                if (alltablesMap == null) {
+                    LOGGER.error("failed to get table map");
+                    return null;
                 }
+                Map<String, Object> indexes = fetchTableUniqueIndexes(context);
+                Map<String, Object> map = new LinkedHashMap<>();
+                for (Map.Entry<String, Object> entry: alltablesMap.entrySet()) {
+                    String table = entry.getKey();
+                    if (indexes.containsKey(table)) {
+                        map.put(table, entry.getValue());
+                    } else {
+                        LOGGER.warn("skip " + table + " table, due to no primary or unique index info");
+                    }
+                }
+                return map;
             }
-            return map;
         });
         if (tablesMap == null) {
             throw new ServerErrorException("failed to get table list");
@@ -283,16 +286,19 @@ public class DbaseOps {
             return (Map<String, Object>) columns.get(table);
         }
 
-        columns = (Map<String, Object>) AppCtx.getCacheOps().put("tables_columns", tableInfoCacheTTL * 1000L, () -> {
-            Map<String, Object> map = fetchTableColumns(context);
-            if (map == null) {
-                String msg = "failed to get table columns";
-                LOGGER.error(msg);
-                if (context != null) {
-                    context.logTraceMessage(msg);
+        columns = (Map<String, Object>) AppCtx.getCacheOps().put("tables_columns", tableInfoCacheTTL, new Refreshable() {
+            @Override
+            public Map<String, Object> call() throws Exception {
+                Map<String, Object> map = fetchTableColumns(context);
+                if (map == null) {
+                    String msg = "failed to get table columns";
+                    LOGGER.error(msg);
+                    if (context != null) {
+                        context.logTraceMessage(msg);
+                    }
                 }
+                return map;
             }
-            return map;
         });
 
         if (columns == null) {
@@ -300,6 +306,23 @@ public class DbaseOps {
         }
 
         return (Map<String, Object>) columns.get(table);
+    }
+
+    public List<String> getPrimaryIndexes(Context context, String table) {
+        Map<String, Object> map = getTableIndexes(context, table);
+        if (map == null || map.size() == 0) {
+            return null;
+        }
+        List<String> primaryIndexes = new ArrayList<>();
+        if (map.containsKey("PRIMARY")) {
+            primaryIndexes = (List<String>) map.get("PRIMARY");
+        } else {
+            for (Map.Entry<String, Object> entry: map.entrySet()) {
+                primaryIndexes = (List<String>) entry.getValue();
+                break;
+            }
+        }
+        return primaryIndexes;
     }
 
     public String getTableAutoIncColumn(Context context, String table) {
@@ -310,16 +333,19 @@ public class DbaseOps {
             return (String) columns.get(table);
         }
 
-        columns = (Map<String, Object>) AppCtx.getCacheOps().put("tables_auto_inc_columns", tableInfoCacheTTL * 1000L, () -> {
-            Map<String, Object> map = fetchTablesAutoIncrementColumns(context);
-            if (map == null) {
-                String msg = "failed to get table auto increment column map";
-                LOGGER.error(msg);
-                if (context != null) {
-                    context.logTraceMessage(msg);
+        columns = (Map<String, Object>) AppCtx.getCacheOps().put("tables_auto_inc_columns", tableInfoCacheTTL, new Refreshable() {
+            @Override
+            public Map<String, Object> call() throws Exception {
+                Map<String, Object> map = fetchTablesAutoIncrementColumns(context);
+                if (map == null) {
+                    String msg = "failed to get table auto increment column map";
+                    LOGGER.error(msg);
+                    if (context != null) {
+                        context.logTraceMessage(msg);
+                    }
                 }
+                return map;
             }
-            return map;
         });
 
         if (columns == null) {
@@ -338,16 +364,19 @@ public class DbaseOps {
             return (Map<String, Object>) map.get(table);
         }
 
-        map = AppCtx.getCacheOps().put("tables_indexes", tableInfoCacheTTL * 1000L, () -> {
-            Map<String, Object> indexes = fetchTableUniqueIndexes(context);
-            if (indexes == null) {
-                String msg = "failed to get table indexes";
-                LOGGER.error(msg);
-                if (context != null) {
-                    context.logTraceMessage(msg);
+        map = AppCtx.getCacheOps().put("tables_indexes", tableInfoCacheTTL, new Refreshable() {
+            @Override
+            public Map<String, Object> call() throws Exception {
+                Map<String, Object> indexes = fetchTableUniqueIndexes(context);
+                if (indexes == null) {
+                    String msg = "failed to get table indexes";
+                    LOGGER.error(msg);
+                    if (context != null) {
+                        context.logTraceMessage(msg);
+                    }
                 }
+                return indexes;
             }
-            return indexes;
         });
         if (map == null) {
             throw new ServerErrorException("failed to get table indexes");

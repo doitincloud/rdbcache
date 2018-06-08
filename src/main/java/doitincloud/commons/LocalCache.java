@@ -7,7 +7,6 @@
 package doitincloud.commons;
 
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -72,7 +71,7 @@ public class LocalCache extends Thread {
         cache.put(key, new Cached(map, secsToLive > maxSecsToLive ? maxSecsToLive : secsToLive));
     }
 
-    public Map<String, Object> put(String key, Long secsToLive, Callable<Map<String, Object>> refreshable) {
+    public Map<String, Object> put(String key, Long secsToLive, Refreshable refreshable) {
         Map<String, Object> map = refresh(refreshable);
         if (map == null) {
             return null;
@@ -134,7 +133,7 @@ public class LocalCache extends Thread {
         return cached.getMap();
     }
 
-    private Map<String, Object> refresh(Callable<Map<String, Object>> refreshable) {
+    private Map<String, Object> refresh(Refreshable refreshable) {
         try {
             return refreshable.call();
         } catch (Exception e) {
@@ -321,7 +320,7 @@ public class LocalCache extends Thread {
 
         long lastAccessAt;
 
-        Callable<Map<String, Object>> refreshable;
+        Refreshable refreshable;
 
         private Cached() {}
 
@@ -388,7 +387,12 @@ public class LocalCache extends Thread {
             }
             clone.createdAt = createdAt;
             clone.timeToLive = timeToLive;
-            clone.refreshable = refreshable;
+            try {
+                clone.refreshable = refreshable.clone();
+            } catch (CloneNotSupportedException e) {
+                clone.refreshable = refreshable;
+                //e.printStackTrace();
+            }
             return clone;
         }
     }

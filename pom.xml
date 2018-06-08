@@ -5,7 +5,7 @@
 
   <groupId>doitincloud</groupId>
   <artifactId>rdbcache</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
   <name>rdbcache</name>
   <description>redis database cache asynchronous api server</description>
   <url>http://rdbcache.com/</url>
@@ -39,7 +39,7 @@
     <mysql-connector.verion>6.0.6</mysql-connector.verion>
     <jedis.client.version>2.9.0</jedis.client.version>
     <httpclient.version>4.4.1</httpclient.version>
-    <commons-lang.version>2.3</commons-lang.version>
+    <commons-lang3.version>3.7</commons-lang3.version>
     <guava.version>r05</guava.version>
     <usertype.core.version>6.0.1.GA</usertype.core.version>
     <oauth2.version>2.3.0.RELEASE</oauth2.version>
@@ -117,9 +117,9 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>${commons-lang.version}</version>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang3.version}</version>
     </dependency>
 
     <dependency>
