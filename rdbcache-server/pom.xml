@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>doitincloud.rdbcache</groupId>
+  <artifactId>rdbcache-server</artifactId>
+  <!-- ><version>2.0.2.SNAPSHOT</version> -->
+  <version>1.5.13.RELEASE</version>
+  <name>rdbcache</name>
+  <description>redis database cache asynchronous api server</description>
+  <url>http://rdbcache.com/</url>
+  <packaging>jar</packaging>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Sam Wen</name>
+      <email>doitincloud@gmail.com</email>
+      <organization>doiticloud</organization>
+      <organizationUrl>http://doiticloud.com</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:rdbcache/rdbcache.git</connection>
+    <developerConnection>scm:git:ssh://github.com:rdbcache/rdbcache.git</developerConnection>
+    <url>https://github.com/rdbcache/rdbcache</url>
+  </scm>
+
+  <parent>
+    <groupId>doitincloud.rdbcache</groupId>
+    <artifactId>rdbcache-parent</artifactId>
+    <!-- ><version>2.0.2.SNAPSHOT</version> -->
+    <version>1.5.13.RELEASE</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <timestamp>${maven.build.timestamp} UTC</timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+    <authors>Sam Wen</authors>
+
+    <mysql-connector.verion>6.0.6</mysql-connector.verion>
+    <oauth2.version>2.3.0.RELEASE</oauth2.version>
+
+    <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+    <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
+    <maven-jar-plugin.version>2.1</maven-jar-plugin.version>
+    <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+    <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+        <groupId>doitincloud.rdbcache</groupId>
+        <artifactId>rdbcache-core</artifactId>
+        <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>${mysql-connector.verion}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security.oauth</groupId>
+      <artifactId>spring-security-oauth2</artifactId>
+      <version>${oauth2.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+  </dependencies>
+
+  <profiles>
+
+    <profile>
+      <id>dev</id>
+        <activation>
+          <activeByDefault>true</activeByDefault>
+          <property>
+            <name>env</name>
+            <value>dev</value>
+          </property>
+        </activation>
+      <properties>
+        <build.profile.id>dev</build.profile.id>
+        <build.doCheck>false</build.doCheck>
+        <build.doUpdate>false</build.doUpdate>
+        <profile_finalname>${project.artifactId}-${project.version}-${build.profile.id}-${buildNumber}</profile_finalname>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>test</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>test</value>
+        </property>
+      </activation>
+      <properties>
+        <build.profile.id>test</build.profile.id>
+        <build.doCheck>false</build.doCheck>
+        <build.doUpdate>false</build.doUpdate>
+        <profile_finalname>${project.artifactId}-${project.version}-${build.profile.id}-${buildNumber}</profile_finalname>
+      </properties>
+    </profile>
+ 
+    <profile>
+      <id>prod</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>prod</value>
+        </property>
+      </activation>
+      <properties>
+        <build.profile.id>prod</build.profile.id>
+        <build.doCheck>false</build.doCheck>
+        <build.doUpdate>false</build.doUpdate>
+        <profile_finalname>${project.artifactId}</profile_finalname>
+      </properties>
+    </profile>
+
+  </profiles>
+
+  <build>
+
+    <finalName>${profile_finalname}</finalName>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${boot.version}</version>
+        <configuration>
+          <excludeDevtools>true</excludeDevtools>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>${maven-clean-plugin.version}</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}/src/main/resources</directory>
+              <includes>
+                <include>**/*.sql</include>
+              </includes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>copy-configuration</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/install</directory>
+                  <includes>
+                    <include>application.properties</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/src/main/resources</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/profiles/${build.profile.id}</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>${buildnumber-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+            </execution>
+        </executions>
+        <configuration>
+          <shortRevisionLength>5</shortRevisionLength>
+          <doCheck>${build.doCheck}</doCheck>
+          <doUpdate>${build.doUpdate}</doUpdate>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin.version}</version>
+        <configuration>
+          <archive>
+            <index>true</index>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+              <Implementation-Build>${buildNumber}</Implementation-Build>
+              <Build-Time>${timestamp}</Build-Time>
+              <Pofile-Id>${build.profile.id}</Pofile-Id>
+              <Url>${project.url}</Url>
+              <Authors>${authors}</Authors>
+              <Description>${project.description}</Description>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+</project>

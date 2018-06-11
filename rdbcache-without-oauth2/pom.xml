@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>doitincloud.rdbcache</groupId>
+  <artifactId>rdbcache-without-oauth2</artifactId>
+  <!-- ><version>2.0.2.SNAPSHOT</version> -->
+  <version>1.5.13.RELEASE</version>
+  <name>rdbcache-without-oauth2</name>
+  <description>redis database cache asynchronous api server without oauth2</description>
+  <url>http://rdbcache.com/</url>
+  <packaging>jar</packaging>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Sam Wen</name>
+      <email>doitincloud@gmail.com</email>
+      <organization>doiticloud</organization>
+      <organizationUrl>http://doiticloud.com</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:rdbcache/rdbcache.git</connection>
+    <developerConnection>scm:git:ssh://github.com:rdbcache/rdbcache.git</developerConnection>
+    <url>https://github.com/rdbcache/rdbcache</url>
+  </scm>
+
+  <parent>
+    <groupId>doitincloud.rdbcache</groupId>
+    <artifactId>rdbcache-parent</artifactId>
+    <!-- ><version>2.0.2.SNAPSHOT</version> -->
+    <version>1.5.13.RELEASE</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <timestamp>${maven.build.timestamp} UTC</timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+    <authors>Sam Wen</authors>
+
+    <mysql-connector.verion>6.0.6</mysql-connector.verion>
+
+    <junit.version>4.12</junit.version>
+    <mockito-core.version>2.1.0</mockito-core.version>
+    <powermock.version>1.7.0RC2</powermock.version>
+
+    <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
+    <maven-jar-plugin.version>2.1</maven-jar-plugin.version>
+
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+        <groupId>doitincloud.rdbcache</groupId>
+        <artifactId>rdbcache-core</artifactId>
+        <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>${mysql-connector.verion}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito-core.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito2</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludeDevtools>true</excludeDevtools>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <includes>
+            <include>**/Test*.java</include>
+            <include>**/*Test.java</include>
+            <include>**/*Tests.java</include>
+            <include>**/*TestCase.java</include>
+          </includes>
+          <properties>
+            <!-- <includeTags>fast</includeTags> -->
+            <excludeTags>slow</excludeTags>
+            <!--
+            <configurationParameters>
+                junit.jupiter.conditions.deactivate = *
+            </configurationParameters>
+            -->
+          </properties>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>${buildnumber-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+            </execution>
+        </executions>
+        <configuration>
+          <shortRevisionLength>5</shortRevisionLength>
+          <doCheck>${build.doCheck}</doCheck>
+          <doUpdate>${build.doUpdate}</doUpdate>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin.version}</version>
+        <configuration>
+          <archive>
+            <index>true</index>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+              <Implementation-Build>${buildNumber}</Implementation-Build>
+              <Build-Time>${timestamp}</Build-Time>
+              <Pofile-Id>${build.profile.id}</Pofile-Id>
+              <Url>${project.url}</Url>
+              <Authors>${authors}</Authors>
+              <Description>${project.description}</Description>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+</project>
