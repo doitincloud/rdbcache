@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-# install doitincloud.rdbcache
+# install com.doitincloud.rdbcache
 #
 # By Sam Wen @ 02/10/2018
 #
 ##########################
 
-DOWNLOAD_URL='https://raw.githubusercontent.com/doitincloud.rdbcache/doitincloud.rdbcache/master/download/doitincloud.rdbcache.zip'
+DOWNLOAD_URL='https://raw.githubusercontent.com/com.doitincloud.rdbcache/com.doitincloud.rdbcache/master/download/com.doitincloud.rdbcache.zip'
 
 if [ "$(id -u)" -ne 0 ] ; then
   echo "This script must run under root."
@@ -54,20 +54,20 @@ if [ -z "$WGET_BIN" ]; then
   echo "Unable to find wget. Please install wget."
   exit 1
 fi
-if [ -f ./doitincloud.rdbcache.zip ]; then
-  rm -f ./doitincloud.rdbcache.zip
+if [ -f ./com.doitincloud.rdbcache.zip ]; then
+  rm -f ./com.doitincloud.rdbcache.zip
 fi
 $WGET_BIN -q $DOWNLOAD_URL
 if [ $? -ne 0 ]; then
   echo "Run wget failed"
   exit 1
 fi
-if [ ! -f ./doitincloud.rdbcache.zip ]; then
-  echo "Failed to locate doitincloud.rdbcache.zip"
+if [ ! -f ./com.doitincloud.rdbcache.zip ]; then
+  echo "Failed to locate com.doitincloud.rdbcache.zip"
   exit 1
 fi
-if [ -d ./doitincloud.rdbcache ]; then
-  rm -rf doitincloud.rdbcache
+if [ -d ./com.doitincloud.rdbcache ]; then
+  rm -rf com.doitincloud.rdbcache
 fi
 
 UNZIP_BIN=$(which unzip)
@@ -76,27 +76,27 @@ if [ -z "$UNZIP_BIN" ]; then
   exit 1
 fi
 
-$UNZIP_BIN ./doitincloud.rdbcache.zip
+$UNZIP_BIN ./com.doitincloud.rdbcache.zip
 
-DOWNLOAD_DIR=$(pwd)/doitincloud.rdbcache
-rm -f ./doitincloud.rdbcache.zip
+DOWNLOAD_DIR=$(pwd)/com.doitincloud.rdbcache
+rm -f ./com.doitincloud.rdbcache.zip
 
-if [ ! -f $DOWNLOAD_DIR/doitincloud.rdbcache.jar ]; then
-  echo "File doitincloud.rdbcache.jar not found."
+if [ ! -f $DOWNLOAD_DIR/com.doitincloud.rdbcache.jar ]; then
+  echo "File com.doitincloud.rdbcache.jar not found."
   exit 1
 fi
 
-if [ -d /opt/doitincloud.rdbcache ]; then
-  rm -rf /opt/doitincloud.rdbcache
+if [ -d /opt/com.doitincloud.rdbcache ]; then
+  rm -rf /opt/com.doitincloud.rdbcache
 fi
 
-mkdir -p /opt/doitincloud.rdbcache
+mkdir -p /opt/com.doitincloud.rdbcache
 
-cp $DOWNLOAD_DIR/* /opt/doitincloud.rdbcache
+cp $DOWNLOAD_DIR/* /opt/com.doitincloud.rdbcache
 
-rm -rf ./doitincloud.rdbcache
+rm -rf ./com.doitincloud.rdbcache
 
-cat <<EOT > /opt/doitincloud.rdbcache/doitincloud.rdbcache
+cat <<EOT > /opt/com.doitincloud.rdbcache/com.doitincloud.rdbcache
 #!/bin/bash
 #
 # By Sam Wen @ 02/10/2018
@@ -142,23 +142,23 @@ if [ -z "\$DB_USER_PASS" ]; then
   exit 1
 fi
 
-cd /opt/doitincloud.rdbcache
-$JAVA_BIN -jar ./doitincloud.rdbcache.jar "\$@"
+cd /opt/com.doitincloud.rdbcache
+$JAVA_BIN -jar ./com.doitincloud.rdbcache.jar "\$@"
 EOT
 
-chmod +x /opt/doitincloud.rdbcache/doitincloud.rdbcache
+chmod +x /opt/com.doitincloud.rdbcache/com.doitincloud.rdbcache
 
-if [ -L /usr/bin/doitincloud.rdbcache ]; then
-  rm -f /usr/bin/doitincloud.rdbcache
+if [ -L /usr/bin/com.doitincloud.rdbcache ]; then
+  rm -f /usr/bin/com.doitincloud.rdbcache
 fi
 
 BIN_FOLDER=$(dirname /usr/local/bin/wget)
 
-ln -s /opt/doitincloud.rdbcache/doitincloud.rdbcache $BIN_FOLDER/doitincloud.rdbcache
+ln -s /opt/com.doitincloud.rdbcache/com.doitincloud.rdbcache $BIN_FOLDER/com.doitincloud.rdbcache
 
 echo ""
-echo "doitincloud.rdbcache is installed in /opt/doitincloud.rdbcache folder"
-echo "symlink $BIN_FOLDER/doitincloud.rdbcache is created"
+echo "com.doitincloud.rdbcache is installed in /opt/com.doitincloud.rdbcache folder"
+echo "symlink $BIN_FOLDER/com.doitincloud.rdbcache is created"
 if [ "$(uname -s)" == "Linux" ]; then
-  echo "You can run /opt/doitincloud.rdbcache/install_service to install doitincloud.rdbcache as service"
+  echo "You can run /opt/com.doitincloud.rdbcache/install_service to install com.doitincloud.rdbcache as service"
 fi

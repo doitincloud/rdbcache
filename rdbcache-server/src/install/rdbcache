@@ -39,5 +39,5 @@ if [ -z "$DB_USER_PASS" ]; then
   exit 1
 fi
 
-cd /opt/doitincloud.rdbcache
-java -jar ./doitincloud.rdbcache.jar "$@"
+cd /opt/com.doitincloud.rdbcache
+java -jar ./com.doitincloud.rdbcache.jar "$@"

@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>doitincloud.rdbcache</groupId>
+  <groupId>com.doitincloud.rdbcache</groupId>
   <artifactId>rdbcache-parent</artifactId>
   <!-- ><version>2.0.2.SNAPSHOT</version> -->
   <version>1.5.13.RELEASE</version>
@@ -22,7 +22,7 @@
   <developers>
     <developer>
       <name>Sam Wen</name>
-      <email>doitincloud@gmail.com</email>
+      <email>com.doitincloud@gmail.com</email>
       <organization>doiticloud</organization>
       <organizationUrl>http://doiticloud.com</organizationUrl>
     </developer>

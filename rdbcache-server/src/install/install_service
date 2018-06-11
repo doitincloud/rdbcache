@@ -11,26 +11,26 @@ if [ "$(id -u)" -ne 0 ] ; then
   exit 1
 fi
 
-if [ -L /etc/init.d/doitincloud.rdbcache ]; then
-  service doitincloud.rdbcache stop
-  rm -f /etc/init.d/doitincloud.rdbcache
+if [ -L /etc/init.d/com.doitincloud.rdbcache ]; then
+  service com.doitincloud.rdbcache stop
+  rm -f /etc/init.d/com.doitincloud.rdbcache
 fi
 
-ln -s /opt/doitincloud.rdbcache/rdbcache_service /etc/init.d/doitincloud.rdbcache
+ln -s /opt/com.doitincloud.rdbcache/rdbcache_service /etc/init.d/com.doitincloud.rdbcache
 
-if [ -L /etc/doitincloud.rdbcache.conf ]; then
-  rm -f /etc/doitincloud.rdbcache.conf
+if [ -L /etc/com.doitincloud.rdbcache.conf ]; then
+  rm -f /etc/com.doitincloud.rdbcache.conf
 fi
 
-if [ -f /var/log/doitincloud.rdbcache.log ]; then
-  rm -f /var/log/doitincloud.rdbcache.log
+if [ -f /var/log/com.doitincloud.rdbcache.log ]; then
+  rm -f /var/log/com.doitincloud.rdbcache.log
 fi
 
-touch /var/log/doitincloud.rdbcache.log
-chmod 666 /var/log/doitincloud.rdbcache.log
+touch /var/log/com.doitincloud.rdbcache.log
+chmod 666 /var/log/com.doitincloud.rdbcache.log
 
-cat <<EOT > /etc/logrotate.d/doitincloud.rdbcache
-"/var/log/doitincloud.rdbcache.log" {
+cat <<EOT > /etc/logrotate.d/com.doitincloud.rdbcache
+"/var/log/com.doitincloud.rdbcache.log" {
   weekly
   size 512k
   rotate 12
@@ -43,8 +43,8 @@ cat <<EOT > /etc/logrotate.d/doitincloud.rdbcache
 }
 EOT
 
-ln -s /opt/doitincloud.rdbcache/application.properties /etc/doitincloud.rdbcache.conf
+ln -s /opt/com.doitincloud.rdbcache/application.properties /etc/com.doitincloud.rdbcache.conf
 
-chkconfig --add doitincloud.rdbcache
+chkconfig --add com.doitincloud.rdbcache
 
-service doitincloud.rdbcache start
+service com.doitincloud.rdbcache start
