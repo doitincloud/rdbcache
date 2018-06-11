@@ -33,7 +33,6 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 @RestController
-@Profile({"dev", "test", "prod"})
 public class RTQueryApis {
 
     /**

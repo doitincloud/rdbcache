@@ -5,7 +5,6 @@ import com.google.common.io.CharStreams;
 import doitincloud.commons.Utils;
 
 import doitincloud.rdbcache.configs.AppCtx;
-import doitincloud.rdbcache.controllers.supports.Request;
 import doitincloud.rdbcache.models.KeyInfo;
 import doitincloud.rdbcache.repositories.KeyInfoRepo;
 import doitincloud.rdbcache.repositories.SimpleKeyInfoRepo;
@@ -36,7 +35,6 @@ import org.junit.Test;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;

@@ -30,7 +30,7 @@ public class KeyInfo implements Cloneable {
     private List<Object> params;
 
     @JsonProperty("query_key")
-    private String queryKey = "";  // null means worked on it, conclusion is not for any query
+    private String queryKey = "";  // if it is null means worked on it, conclusion is not for any query
 
     @JsonProperty("is_new")
     private Boolean isNew = false;
@@ -57,6 +57,7 @@ public class KeyInfo implements Cloneable {
         clause = indexKey + " = ?";
         params = new ArrayList<>();
         params.add(indexValue);
+        queryKey = "NOOPS";
     }
 
     public KeyInfo(String table, String[] indexKeys, Object[] indexValues) {
@@ -70,6 +71,7 @@ public class KeyInfo implements Cloneable {
             clause += indexKeys[i] + " = ?";
             params.add(indexValues[i]);
         }
+        queryKey = "NOOPS";
     }
 
     public String getExpire() {

@@ -50,8 +50,6 @@ public class AppCtx {
 
     private static JdbcTemplate jdbcTemplate;
 
-    private static JdbcTemplate systemJdbcTemplate;
-
     private static StringRedisTemplate stringRedisTemplate;
 
     public static ApplicationContext getApplicationContext() {
@@ -272,30 +270,8 @@ public class AppCtx {
         return template.getDataSource();
     }
 
-    public static JdbcTemplate getSystemJdbcTemplate() {
-        if (ctx != null && systemJdbcTemplate == null) {
-            try {
-                systemJdbcTemplate = (JdbcTemplate) ctx.getBean("systemJdbcTemplate");
-            } catch (Exception e) {
-                //e.printStackTrace();
-            }
-            if (systemJdbcTemplate == null) {
-                systemJdbcTemplate = getJdbcTemplate();
-            }
-        }
-        return systemJdbcTemplate;
-    }
-
     public static void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         AppCtx.jdbcTemplate = jdbcTemplate;
-    }
-
-    public static DataSource getSystemJdbcDataSource() {
-
-        JdbcTemplate template = getSystemJdbcTemplate();
-        if (template == null) return null;
-
-        return template.getDataSource();
     }
 
     public static StringRedisTemplate getStringRedisTemplate() {

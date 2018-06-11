@@ -26,15 +26,9 @@ public class DataSourceConfig {
     @Value("classpath:data.sql")
     private Resource dataScript;
 
-    @Value("classpath:system-schema.sql")
-    private Resource systemSchemaScript;
-
-    @Value("classpath:system-data.sql")
-    private Resource systemDataScript;
-
     @Bean
     public Boolean h2Database() {
-        String driver = env.getProperty("system.datasource.driver-class-name");
+        String driver = env.getProperty("spring.datasource.driver-class-name");
         if (driver.indexOf(".h2.") > 0) {
             return true;
         } else {
@@ -57,25 +51,6 @@ public class DataSourceConfig {
         dataSource.setUrl(env.getProperty("spring.datasource.url"));
         dataSource.setUsername(env.getProperty("spring.datasource.username"));
         dataSource.setPassword(env.getProperty("spring.datasource.password"));
-        return dataSource;
-    }
-
-    @Bean
-    public DatabasePopulator systemDatabasePopulator() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        String driver = env.getProperty("system.datasource.driver-class-name");
-        populator.addScript(systemSchemaScript);
-        populator.addScript(systemDataScript);
-        return populator;
-    }
-
-    @Bean
-    public DataSource systemDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getProperty("system.datasource.driver-class-name"));
-        dataSource.setUrl(env.getProperty("system.datasource.url"));
-        dataSource.setUsername(env.getProperty("system.datasource.username"));
-        dataSource.setPassword(env.getProperty("system.datasource.password"));
         return dataSource;
     }
 }

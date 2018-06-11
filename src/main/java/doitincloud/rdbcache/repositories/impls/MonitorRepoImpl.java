@@ -33,7 +33,7 @@ public class MonitorRepoImpl implements MonitorRepo {
 
     @EventListener
     public void handleApplicationReadyEvent(ApplicationReadyEvent event) {
-        jdbcTemplate = AppCtx.getSystemJdbcTemplate();
+        jdbcTemplate = AppCtx.getJdbcTemplate();
     }
 
     @Override

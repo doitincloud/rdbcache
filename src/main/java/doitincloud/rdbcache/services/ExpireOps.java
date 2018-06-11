@@ -258,15 +258,10 @@ public class ExpireOps {
                 List<String> primaryIndexes = AppCtx.getDbaseOps().getPrimaryIndexes(context, table);
                 if (primaryIndexes == null) {
 
-                    String msg = "best effort mode - primary index is null for NOOPS: " + table;
+                    String msg = "best effort - primary index is null for NOOPS: " + table;
                     LOGGER.trace(msg);
                     context.logTraceMessage(msg);
                     keyInfo = new KeyInfo();
-
-                } else if (primaryIndexes.size() == 1) {
-
-                    String indexKey = primaryIndexes.get(0);
-                    keyInfo = new KeyInfo(table, indexKey, keyValues[0]);
 
                 } else {
 
@@ -280,7 +275,7 @@ public class ExpireOps {
 
                     } else {
 
-                        String msg = "best effort mode - values size not correct for NOOPS: " + table;
+                        String msg = "best effort - values size not correct for NOOPS: " + table;
                         LOGGER.warn(msg);
                         context.logTraceMessage(msg);
                         keyInfo = new KeyInfo();

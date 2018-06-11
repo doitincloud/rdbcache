@@ -22,6 +22,7 @@ import doitincloud.rdbcache.supports.AnyKey;
 import doitincloud.rdbcache.supports.Context;
 import doitincloud.rdbcache.supports.KvPairs;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

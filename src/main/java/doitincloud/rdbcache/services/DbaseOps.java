@@ -233,14 +233,7 @@ public class DbaseOps {
         if (!tables.containsKey(table)) {
             throw new ServerErrorException("table "+table+" not found");
         }
-        String type = (String) tables.get(table);
-        if (type.equals("data")) {
-            return AppCtx.getJdbcTemplate();
-        }
-        if (type.equals("system")) {
-            return AppCtx.getSystemJdbcTemplate();
-        }
-        throw new ServerErrorException("JdbcTemplate " + type + " not supported");
+        return AppCtx.getJdbcTemplate();
     }
 
     public Map<String, Object> getTablesMap(Context context) {
@@ -409,14 +402,6 @@ public class DbaseOps {
     public void setDefaultToDbTimeZone() {
 
         String timezone = "UTC";
-        /*
-        if (databaseType.equals("mysql")) {
-            String tz = fetchMysqlDbTimeZone();
-            if (tz != null) {
-                timezone = tz;
-            }
-        }
-        */
         TimeZone.setDefault(TimeZone.getTimeZone(timezone));
     }
 
@@ -456,24 +441,16 @@ public class DbaseOps {
             Map<String, Object> map = new LinkedHashMap<String, Object>();
 
             JdbcTemplate jdbcTemplate = AppCtx.getJdbcTemplate();
-            fetchMysqlTableMap(context, jdbcTemplate, map, "data");
+            fetchMysqlTableMap(context, jdbcTemplate, map, "default");
 
-            JdbcTemplate systemJdbcTemplate = AppCtx.getSystemJdbcTemplate();
-            if (systemJdbcTemplate != jdbcTemplate) {
-                fetchMysqlTableMap(context, systemJdbcTemplate, map, "system");
-            }
             return map;
         }
         if (databaseType.equals("h2")) {
             Map<String, Object> map = new LinkedHashMap<String, Object>();
 
             JdbcTemplate jdbcTemplate = AppCtx.getJdbcTemplate();
-            fetchH2TableMap(context, jdbcTemplate, map, "data");
+            fetchH2TableMap(context, jdbcTemplate, map, "default");
 
-            JdbcTemplate systemJdbcTemplate = AppCtx.getSystemJdbcTemplate();
-            if (systemJdbcTemplate != jdbcTemplate) {
-                fetchH2TableMap(context, systemJdbcTemplate, map, "sysem");
-            }
             return map;
         }
         throw new ServerErrorException("database type not supported");
@@ -543,10 +520,6 @@ public class DbaseOps {
             JdbcTemplate jdbcTemplate = AppCtx.getJdbcTemplate();
             fetchMysqlTableColumns(context, jdbcTemplate, map);
 
-            JdbcTemplate systemJdbcTemplate = AppCtx.getSystemJdbcTemplate();
-            if (systemJdbcTemplate != jdbcTemplate) {
-                fetchMysqlTableColumns(context, systemJdbcTemplate, map);
-            }
             return map;
         }
         if (databaseType.equals("h2")) {
@@ -555,10 +528,6 @@ public class DbaseOps {
             JdbcTemplate jdbcTemplate = AppCtx.getJdbcTemplate();
             fetchH2TableColumns(context, jdbcTemplate, map);
 
-            JdbcTemplate systemJdbcTemplate = AppCtx.getSystemJdbcTemplate();
-            if (systemJdbcTemplate != jdbcTemplate) {
-                fetchH2TableColumns(context, systemJdbcTemplate, map);
-            }
             return map;
         }
         throw new ServerErrorException("database type not supported");
@@ -723,10 +692,6 @@ public class DbaseOps {
             JdbcTemplate jdbcTemplate = AppCtx.getJdbcTemplate();
             fetchMysqlTableAutoIncrementColumns(context, jdbcTemplate, autoIncMap);
 
-            JdbcTemplate systemJdbcTemplate = AppCtx.getSystemJdbcTemplate();
-            if (jdbcTemplate != systemJdbcTemplate) {
-                fetchMysqlTableAutoIncrementColumns(context, systemJdbcTemplate, autoIncMap);
-            }
             return autoIncMap;
         }
         if (databaseType.equals("h2")) {
@@ -735,10 +700,6 @@ public class DbaseOps {
             JdbcTemplate jdbcTemplate = AppCtx.getJdbcTemplate();
             fetchH2TableAutoIncrementColumns(context, jdbcTemplate, autoIncMap);
 
-            JdbcTemplate systemJdbcTemplate = AppCtx.getSystemJdbcTemplate();
-            if (jdbcTemplate != systemJdbcTemplate) {
-                fetchH2TableAutoIncrementColumns(context, systemJdbcTemplate, autoIncMap);
-            }
             return autoIncMap;
         }
         throw new ServerErrorException("database type not supported");
@@ -826,10 +787,6 @@ public class DbaseOps {
             JdbcTemplate jdbcTemplate = AppCtx.getJdbcTemplate();
             fetchMysqlTableUniqueIndexes(context, jdbcTemplate, map);
 
-            JdbcTemplate systemJdbcTemplate = AppCtx.getSystemJdbcTemplate();
-            if (systemJdbcTemplate != jdbcTemplate) {
-                fetchMysqlTableUniqueIndexes(context, systemJdbcTemplate, map);
-            }
             return map;
         }
         if (databaseType.equals("h2")) {
@@ -837,10 +794,6 @@ public class DbaseOps {
             JdbcTemplate jdbcTemplate = AppCtx.getJdbcTemplate();
             fetchH2TableUniqueIndexes(context, jdbcTemplate, map);
 
-            JdbcTemplate systemJdbcTemplate = AppCtx.getSystemJdbcTemplate();
-            if (systemJdbcTemplate != jdbcTemplate) {
-                fetchH2TableUniqueIndexes(context, systemJdbcTemplate, map);
-            }
             return map;
         }
         throw new ServerErrorException("database type not supported");

@@ -26,7 +26,7 @@ public class PropCfg {
     private static String defaultExpire = "180";
 
     private static String defaultAttr = "async";
-    
+
     private static Boolean enableMonitor = false;
 
     private static Long eventLockTimeout = 60L;
@@ -50,7 +50,7 @@ public class PropCfg {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Value("${spring.profiles.active}")
+    @Value("${spring.profiles.active:prod}")
     public void setActiveProfile(String name) {
         if (name != null && name.length() > 0) {
             activeProfile = name;
@@ -61,7 +61,7 @@ public class PropCfg {
         return activeProfile;
     }
 
-    @Value("${rdbcache.hdata_prefix}")
+    @Value("${rdbcache.hdata_prefix:hdata}")
     public void setHdataPrefix(String prefix) {
         if (prefix != null && prefix.length() > 0) {
             hdataPrefix = prefix.replace("::", "");
@@ -72,7 +72,7 @@ public class PropCfg {
         return hdataPrefix;
     }
 
-    @Value("${rdbcache.hkeys_prefix}")
+    @Value("${rdbcache.hkeys_prefix:hkey}")
     public void setHkeyPrefix(String prefix) {
         if (prefix != null && prefix.length() > 0) {
             hkeyPrefix = prefix.replace("::", "");
@@ -83,7 +83,7 @@ public class PropCfg {
         return hkeyPrefix;
     }
 
-    @Value("${rdbcache.event_prefix}")
+    @Value("${rdbcache.event_prefix:event}")
     public void setEventPrefix(String prefix) {
         if (prefix != null && prefix.length() > 0) {
             eventPrefix = prefix.replace("::", "");
@@ -94,7 +94,7 @@ public class PropCfg {
         return eventPrefix;
     }
 
-    @Value("${rdbcache.queue_name}")
+    @Value("${rdbcache.queue_name:queue}")
     public void setQueueName(String name) {
         if (name != null && name.length() > 0) {
             queueName = name.replace("::", "");
@@ -105,7 +105,7 @@ public class PropCfg {
         return queueName;
     }
 
-    @Value("${rdbcache.default_expire}")
+    @Value("${rdbcache.default_expire:180}")
     public void setDefaultExpire(String expire) {
         defaultExpire = expire;
     }
@@ -114,7 +114,7 @@ public class PropCfg {
         return defaultExpire;
     }
 
-    @Value("${rdbcache.default_attr}")
+    @Value("${rdbcache.default_attr:async}")
     public void setDefaultAttr(String attr) {
         defaultAttr = attr;
     }
@@ -123,7 +123,7 @@ public class PropCfg {
         return defaultAttr;
     }
 
-    @Value("${rdbcache.enable_monitor}")
+    @Value("${rdbcache.enable_monitor:false}")
     public void setEnableMonitor(Boolean enable) {
         enableMonitor = enable;
     }
@@ -132,12 +132,12 @@ public class PropCfg {
         return enableMonitor;
     }
 
-    @Value("${rdbcache.event_lock_timeout}")
+    @Value("${rdbcache.event_lock_timeout:60}")
     public void setEventLockTimeout(Long timeout) { eventLockTimeout = timeout; }
 
     public static Long getEventLockTimeout() { return eventLockTimeout; }
 
-    @Value("${rdbcache.key_min_cache_ttl}")
+    @Value("${rdbcache.key_min_cache_ttl:180}")
     public void setKeyInfoCacheTTL(Long ttl) {
         keyMinCacheTTL = ttl;
         if (keyMinCacheTTL < 60l) {
@@ -149,7 +149,7 @@ public class PropCfg {
         return keyMinCacheTTL;
     }
 
-    @Value("${rdbcache.table_info_cache_ttl}")
+    @Value("${rdbcache.table_info_cache_ttl:3600}")
     public void setTableInfoCacheTTL(Long ttl) {
         tableInfoCacheTTL = ttl;
     }
@@ -158,7 +158,7 @@ public class PropCfg {
         return tableInfoCacheTTL;
     }
 
-    @Value("${rdbcache.local_cache_max_size}")
+    @Value("${rdbcache.local_cache_max_size:1024}")
     public void setMaxCacheSize(Long maxSize) {
         maxCacheSize = maxSize;
     }
@@ -167,7 +167,7 @@ public class PropCfg {
         return maxCacheSize;
     }
 
-    @Value("${rdbcache.cache_recycle_secs}")
+    @Value("${rdbcache.cache_recycle_secs:300}")
     public void setCacheRecycleSecs(Long secs) {
         cacheRecycleSecs = secs;
     }
@@ -176,7 +176,7 @@ public class PropCfg {
         return cacheRecycleSecs;
     }
 
-    @Value("${rdbcache.enable_db_fallback}")
+    @Value("${rdbcache.enable_db_fallback:false}")
     public void setEnableDbFallback(Boolean enable) {
         enableDbFallback = enable;
     }
@@ -185,7 +185,7 @@ public class PropCfg {
         return enableDbFallback;
     }
 
-    @Value("${rdbcache.data_max_cache_ttl}")
+    @Value("${rdbcache.data_max_cache_ttl:60}")
     public void setDataMaxCacheTLL(Long tll) {
         dataMaxCacheTLL = tll;
     }

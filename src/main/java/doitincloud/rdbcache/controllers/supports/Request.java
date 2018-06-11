@@ -19,6 +19,7 @@ import doitincloud.rdbcache.queries.QueryInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

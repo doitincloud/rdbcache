@@ -25,7 +25,7 @@ public class KvPairRepoImpl implements KvPairRepo {
 
     @EventListener
     public void handleApplicationReadyEvent(ApplicationReadyEvent event) {
-        jdbcTemplate = AppCtx.getSystemJdbcTemplate();
+        jdbcTemplate = AppCtx.getJdbcTemplate();
     }
 
     @Override
