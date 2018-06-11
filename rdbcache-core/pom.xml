@@ -39,11 +39,13 @@
     <artifactId>rdbcache-parent</artifactId>
     <!-- <version>2.0.2.SNAPSHOT</version> -->
     <version>1.5.13.RELEASE</version>
-
     <relativePath>../</relativePath>
   </parent>
 
   <properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <timestamp>${maven.build.timestamp} UTC</timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>

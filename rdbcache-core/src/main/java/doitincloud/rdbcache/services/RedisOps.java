@@ -46,7 +46,7 @@ public class RedisOps {
 
         Object object = connection.getConfig("notify-keyspace-events");
 
-        if (object instanceof  Properties) {     // for spring boot 2+
+        if (object instanceof Properties) {     // for spring boot 2+
 
             Properties properties = (Properties) object;
             for (String key : properties.stringPropertyNames()) {

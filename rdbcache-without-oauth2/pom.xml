@@ -51,7 +51,7 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
     <authors>Sam Wen</authors>
 
-    <mysql-connector.verion>6.0.6</mysql-connector.verion>
+    <mysql-connector.verion>8.0.11</mysql-connector.verion>
 
     <junit.version>4.12</junit.version>
     <mockito-core.version>2.1.0</mockito-core.version>

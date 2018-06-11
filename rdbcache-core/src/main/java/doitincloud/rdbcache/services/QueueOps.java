@@ -105,19 +105,26 @@ public class QueueOps extends Thread {
 
             try {
 
-                if (freshConnection) {
+                if (freshConnection && AppCtx.getRedisOps() != null) {
                     AppCtx.getRedisOps().ensureNotifyKeySpaceEventsEx();
                     freshConnection = false;
                 }
 
-                String task = (String) listOps.leftPop(queueName, 0, TimeUnit.SECONDS);
+                if (freshConnection) {
+                    try { 
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
 
                 if (!isRunning) break;
 
+                String task = (String) listOps.leftPop(queueName, 0, TimeUnit.SECONDS);
+                if (!isRunning) break;
                 if (task == null) continue;
-                
                 onReceiveTask(task);
-
+                    
             } catch (RedisConnectionFailureException e) {
 
                 LOGGER.warn("Connection failure occurred. Restarting task queue after 5000 ms");
