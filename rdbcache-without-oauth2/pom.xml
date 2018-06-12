@@ -3,10 +3,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>com.doitincloud.rdbcache</groupId>
+    <artifactId>rdbcache</artifactId>
+    <version>1.0.1.RELEASE</version>
+    <relativePath>../</relativePath>
+  </parent>
+
   <groupId>com.doitincloud.rdbcache</groupId>
   <artifactId>rdbcache-without-oauth2</artifactId>
-  <!-- ><version>2.0.2.SNAPSHOT</version> -->
-  <version>1.5.13.RELEASE</version>
+  <version>1.0.1.RELEASE</version>
   <name>rdbcache-without-oauth2</name>
   <description>redis database cache asynchronous api server without oauth2</description>
   <url>http://rdbcache.com/</url>
@@ -22,7 +28,7 @@
   <developers>
     <developer>
       <name>Sam Wen</name>
-      <email>com.doitincloud@gmail.com</email>
+      <email>doitincloud@gmail.com</email>
       <organization>doiticloud</organization>
       <organizationUrl>http://doiticloud.com</organizationUrl>
     </developer>
@@ -34,15 +40,9 @@
     <url>https://github.com/rdbcache/rdbcache</url>
   </scm>
 
-  <parent>
-    <groupId>com.doitincloud.rdbcache</groupId>
-    <artifactId>rdbcache-parent</artifactId>
-    <!-- ><version>2.0.2.SNAPSHOT</version> -->
-    <version>1.5.13.RELEASE</version>
-    <relativePath>../</relativePath>
-  </parent>
-
   <properties>
+
+    <java.version>1.8</java.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -122,6 +122,16 @@
   <build>
 
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <compilerArgument>-parameters</compilerArgument>
+        </configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.springframework.boot</groupId>
