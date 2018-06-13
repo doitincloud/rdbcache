@@ -1,9 +1,6 @@
 package com.doitincloud.rdbcache.queries;
 
 import com.doitincloud.rdbcache.configs.Configurations;
-import com.doitincloud.rdbcache.configs.DataSourceConfig;
-import com.doitincloud.rdbcache.configs.JdbcTemplateConfig;
-import com.doitincloud.rdbcache.services.DbaseOps;
 import com.doitincloud.rdbcache.supports.AnyKey;
 import com.doitincloud.rdbcache.supports.Context;
 import com.doitincloud.rdbcache.supports.KvPairs;

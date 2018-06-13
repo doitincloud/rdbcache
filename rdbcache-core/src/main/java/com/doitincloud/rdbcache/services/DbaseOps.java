@@ -12,7 +12,6 @@ import com.doitincloud.rdbcache.configs.PropCfg;
 import com.doitincloud.rdbcache.supports.Context;
 import com.doitincloud.rdbcache.configs.AppCtx;
 import com.doitincloud.commons.Utils;
-import com.doitincloud.commons.VersionInfo;
 import com.doitincloud.rdbcache.models.*;
 import com.doitincloud.rdbcache.queries.QueryInfo;
 import com.doitincloud.rdbcache.repositories.KvPairRepo;
@@ -180,9 +179,9 @@ public class DbaseOps {
         }
 
         monitor.stopNow();
-        VersionInfo versionInfo = AppCtx.getVersionInfo();
-        if (versionInfo != null) {
-            monitor.setBuiltInfo(versionInfo.getBriefInfo());
+        String version = getClass().getPackage().getImplementationVersion();
+        if (version != null) {
+            monitor.setBuiltInfo(version);
         }
 
         MonitorRepo monitorRepo = AppCtx.getMonitorRepo();

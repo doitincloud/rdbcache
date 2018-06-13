@@ -6,14 +6,14 @@
   <parent>
     <groupId>com.doitincloud.rdbcache</groupId>
     <artifactId>rdbcache</artifactId>
-    <version>1.0.1.RELEASE</version>
+    <version>1.0.0.RELEASE</version>
     <relativePath>../</relativePath>
   </parent>
 
   <groupId>com.doitincloud.rdbcache</groupId>
-  <artifactId>rdbcache-without-oauth2</artifactId>
-  <version>1.0.1.RELEASE</version>
-  <name>rdbcache-without-oauth2</name>
+  <artifactId>rdbcache-nooauth2</artifactId>
+  <version>1.0.0.RELEASE</version>
+  <name>rdbcache-nooauth2</name>
   <description>redis database cache asynchronous api server without oauth2</description>
   <url>http://rdbcache.com/</url>
   <packaging>jar</packaging>
@@ -35,9 +35,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:rdbcache/rdbcache.git</connection>
-    <developerConnection>scm:git:ssh://github.com:rdbcache/rdbcache.git</developerConnection>
-    <url>https://github.com/rdbcache/rdbcache</url>
+    <connection>scm:git:git@github.com:doitincloud/rdbcache.git</connection>
+    <developerConnection>scm:git:ssh://github.com:doitincloud/rdbcache.git</developerConnection>
+    <url>https://github.com/doitincloud/rdbcache</url>
   </scm>
 
   <properties>
@@ -164,25 +164,6 @@
       </plugin>
 
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>${buildnumber-maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-            </execution>
-        </executions>
-        <configuration>
-          <shortRevisionLength>5</shortRevisionLength>
-          <doCheck>${build.doCheck}</doCheck>
-          <doUpdate>${build.doUpdate}</doUpdate>
-        </configuration>
-      </plugin>
-
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>${maven-jar-plugin.version}</version>
@@ -191,15 +172,8 @@
             <index>true</index>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
             </manifest>
-            <manifestEntries>
-              <Implementation-Build>${buildNumber}</Implementation-Build>
-              <Build-Time>${timestamp}</Build-Time>
-              <Pofile-Id>${build.profile.id}</Pofile-Id>
-              <Url>${project.url}</Url>
-              <Authors>${authors}</Authors>
-              <Description>${project.description}</Description>
-            </manifestEntries>
           </archive>
         </configuration>
       </plugin>

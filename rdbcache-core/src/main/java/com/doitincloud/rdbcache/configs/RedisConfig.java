@@ -12,6 +12,7 @@ import com.doitincloud.rdbcache.services.ExpireOps;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -23,20 +24,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-    @Bean
-    public RedisProperties redisProperties() {
-        return new RedisProperties();
-    }
-
-    @Bean
-    public JedisConnectionFactory redisConnectionFactory() {
-        JedisConnectionFactory factory = new JedisConnectionFactory();
-
-        RedisProperties properties = redisProperties();
-        properties.configure(factory);
-        factory.afterPropertiesSet();
-
-        return factory;
+    @Bean(name = "jedisConnectionFactory")
+    public JedisConnectionFactory jedisConnectionFactory() {
+        return new JedisConnectionFactory();
     }
 
     @Bean
@@ -49,7 +39,7 @@ public class RedisConfig {
 
         RedisKeyInfoTemplate template =  new RedisKeyInfoTemplate();
 
-        template.setConnectionFactory(redisConnectionFactory());
+        template.setConnectionFactory(jedisConnectionFactory());
 
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
@@ -62,7 +52,7 @@ public class RedisConfig {
     public StringRedisTemplate stringRedisTemplate() {
         StringRedisTemplate template = new StringRedisTemplate();
 
-        template.setConnectionFactory(redisConnectionFactory());
+        template.setConnectionFactory(jedisConnectionFactory());
         template.setHashValueSerializer(new RedisJsonSerializer());
 
         return template;
@@ -76,7 +66,7 @@ public class RedisConfig {
     @Bean
     RedisMessageListenerContainer container() {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(redisConnectionFactory());
+        container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(listenerAdapter(), new PatternTopic("__key*__:expired"));
         return container;
     }

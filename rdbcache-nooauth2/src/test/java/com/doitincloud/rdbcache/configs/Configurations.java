@@ -160,11 +160,6 @@ public class Configurations implements ApplicationContextAware {
     }
 
     @Bean
-    public QueueOps taskQueue() {
-        return new QueueOps();
-    }
-
-    @Bean
     public KeyInfoRepo keyInfoRepo() {
         return new KeyInfoRepoImpl();
     }

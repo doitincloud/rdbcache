@@ -25,25 +25,7 @@ public class Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
-
-        if (args != null && args.length > 0) {
-            for (int i = 0; i < args.length; i++) {
-                if (args[i].equals("-v") || args[i].equals("--version")) {
-                    System.out.println("\n" + AppCtx.getVersionInfo().getFullInfo() + "\n");
-                    return;
-                }
-            }
-        }
-
         SpringApplication app = new SpringApplication(Application.class);
-
-        app.setBanner(new Banner() {
-            @Override
-            public void printBanner(Environment environment, Class<?> aClass, PrintStream printStream) {
-                printStream.println("\n" + AppCtx.getVersionInfo().getFullInfo() + "\n");
-            }
-        });
-
         ConfigurableApplicationContext context = app.run(args);
     }
 }

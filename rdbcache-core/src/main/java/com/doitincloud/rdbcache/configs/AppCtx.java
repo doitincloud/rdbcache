@@ -6,13 +6,10 @@
 
 package com.doitincloud.rdbcache.configs;
 
-import com.doitincloud.commons.VersionInfo;
 import com.doitincloud.rdbcache.repositories.*;
 import com.doitincloud.rdbcache.services.*;
 
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -21,8 +18,6 @@ import javax.sql.DataSource;
 public class AppCtx {
 
     private static ApplicationContext ctx;
-
-    private static VersionInfo versionInfo;
 
     private static AsyncOps asyncOps;
 
@@ -33,8 +28,6 @@ public class AppCtx {
     private static CacheOps cacheOps;
 
     private static RedisOps redisOps;
-
-    private static QueueOps queueOps;
 
     private static DbaseRepo dbaseRepo;
 
@@ -58,17 +51,6 @@ public class AppCtx {
 
     public static void setApplicationContext(ApplicationContext ctx) {
         AppCtx.ctx = ctx;
-    }
-
-    public static VersionInfo getVersionInfo() {
-        if (versionInfo == null) {
-            versionInfo = new VersionInfo("rdbcache");
-        }
-        return versionInfo;
-    }
-
-    public static void setVersionInfo(VersionInfo versionInfo) {
-        AppCtx.versionInfo = versionInfo;
     }
 
     public static AsyncOps getAsyncOps() {
@@ -144,21 +126,6 @@ public class AppCtx {
 
     public static void setCacheOps(CacheOps cache) {
         cacheOps = cache;
-    }
-
-    public static QueueOps getQueueOps() {
-        if (ctx != null && queueOps == null) {
-            try {
-                queueOps = ctx.getBean(QueueOps.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return queueOps;
-    }
-
-    public static void setQueueOps(QueueOps queueOps) {
-        AppCtx.queueOps = queueOps;
     }
 
     public static DbaseRepo getDbaseRepo() {
@@ -287,21 +254,5 @@ public class AppCtx {
 
     public static void setRedisTemplate(StringRedisTemplate stringRedisTemplate) {
         AppCtx.stringRedisTemplate = stringRedisTemplate;
-    }
-
-    public static JedisConnectionFactory getJedisConnectionFactory() {
-
-        StringRedisTemplate template = getStringRedisTemplate();
-        if (template == null) return null;
-
-        return (JedisConnectionFactory) stringRedisTemplate.getConnectionFactory();
-    }
-
-    public static GenericObjectPoolConfig getJedisPoolConfig() {
-
-        JedisConnectionFactory factory = getJedisConnectionFactory();
-        if (factory == null) return null;
-
-        return factory.getPoolConfig();
     }
 }

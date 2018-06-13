@@ -36,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@Service
+//@Service
 public class ExpireOps {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpireOps.class);
