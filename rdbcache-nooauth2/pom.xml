@@ -45,7 +45,7 @@
     <dependency>
         <groupId>com.doitincloud.rdbcache</groupId>
         <artifactId>rdbcache-core</artifactId>
-        <version>${parent.version}</version>
+        <version>${project.parent.version}</version>
     </dependency>
 
     <dependency>
