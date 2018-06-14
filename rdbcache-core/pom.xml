@@ -6,13 +6,13 @@
   <parent>
     <groupId>com.doitincloud.rdbcache</groupId>
     <artifactId>rdbcache</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0.RELEASE</version>
     <relativePath>../</relativePath>
   </parent>
 
   <groupId>com.doitincloud.rdbcache</groupId>
   <artifactId>rdbcache-core</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.0.RELEASE</version>
   <name>rdbcache-core</name>
   <description>redis database cache asynchronous api core</description>
   <url>http://doitincloud.com/</url>

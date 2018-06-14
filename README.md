@@ -1,3 +1,5 @@
+Major reconstruction is in progress. Please wait for document updates.
+
 This README serves as a quick start docuement. For more detailed documentation, please visit website: http://rdbcache.com
 
 Install rdbcache
